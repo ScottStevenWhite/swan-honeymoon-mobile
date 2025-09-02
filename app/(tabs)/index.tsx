@@ -1,75 +1,85 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+// app/(tabs)/index.tsx
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useMemo } from 'react';
+import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { useTrip } from '../../state/useTrip';
 
-export default function HomeScreen() {
+function openInMaps(lat: number, lon: number) {
+  const u = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&travelmode=walking`;
+  Linking.openURL(u);
+}
+
+export default function Itinerary() {
+  const { trip, days, events, legs, options, guestMode, selectOption, toggleGuestMode } = useTrip();
+  const day = days[trip.days[0]];
+
+  const renderItem = (item: (typeof day.items)[number]) => {
+    if (item.kind === 'event') {
+      const e = events[item.id];
+      if (!e) return null;
+      if (guestMode && e.priority === 'APPLE') return null;
+      return (
+        <ThemedView style={styles.card} key={e.id}>
+          <ThemedText type="defaultSemiBold">{e.title}</ThemedText>
+          <ThemedText>{e.durationMin} min — {e.priority}</ThemedText>
+        </ThemedView>
+      );
+    }
+    if (item.kind === 'option') {
+      const g = options[item.id];
+      const choices = g.options.map((id) => ({ id, title: events[id]?.title ?? id }));
+      return (
+        <ThemedView style={styles.card} key={g.id}>
+          <ThemedText type="defaultSemiBold">{g.title}</ThemedText>
+          <View style={styles.row}>
+            {choices.map((c) => (
+              <Pressable
+                key={c.id}
+                onPress={() => selectOption(g.id, c.id)}
+                style={[styles.choice, g.selectedId === c.id && styles.choiceSelected]}>
+                <ThemedText>{c.title}</ThemedText>
+              </Pressable>
+            ))}
+          </View>
+        </ThemedView>
+      );
+    }
+    if (item.kind === 'leg') {
+      const l = legs[item.id];
+      const label = l.mode.toUpperCase() + (l.estimated ? ' (est.)' : '');
+      return (
+        <ThemedView style={[styles.card, styles.leg]} key={l.id}>
+          <ThemedText>{label}</ThemedText>
+        </ThemedView>
+      );
+    }
+    return null;
+  };
+
+  const items = useMemo(() => day.items.map(renderItem), [day, events, legs, options, guestMode]);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <ThemedView style={styles.container}>
+      <View style={styles.headerRow}>
+        <ThemedText type="title">Itinerary — {trip.city}</ThemedText>
+        <Pressable onPress={toggleGuestMode} style={styles.guest}>
+          <ThemedText>{guestMode ? 'Guest Mode: On' : 'Guest Mode: Off'}</ThemedText>
+        </Pressable>
+      </View>
+      <View style={styles.list}>{items}</View>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+  container: { flex: 1, padding: 16, gap: 12 },
+  list: { gap: 12 },
+  card: { padding: 12, borderRadius: 10, borderWidth: StyleSheet.hairlineWidth },
+  leg: { opacity: 0.7 },
+  row: { flexDirection: 'row', gap: 8, flexWrap: 'wrap', marginTop: 8 },
+  choice: { paddingVertical: 6, paddingHorizontal: 8, borderRadius: 8, borderWidth: StyleSheet.hairlineWidth },
+  choiceSelected: { borderWidth: 2 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  guest: { padding: 8 },
 });

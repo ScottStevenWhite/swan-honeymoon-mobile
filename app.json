@@ -7,16 +7,20 @@
     "icon": "./assets/images/icon.png",
     "scheme": "swanhoneymoonmobile",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
+    "assetBundlePatterns": ["assets/**"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.swanhoneymoonmobile"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "minSdkVersion": 23,
+      "package": "com.anonymous.swanhoneymoonmobile"
     },
     "web": {
       "bundler": "metro",
@@ -25,6 +29,7 @@
     },
     "plugins": [
       "expo-router",
+      "@maplibre/maplibre-react-native",
       [
         "expo-splash-screen",
         {

@@ -1,26 +1,33 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const primary = '#7B61FF';     // Iris purple
+const primaryDark = '#C4B5FD'; // Light accent for dark mode
+const bgLight = '#F9F7FF';
+const bgDark = '#14121A';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: '#1B1828',
+    background: bgLight,
+    tint: primary,
+    icon: '#7A7A85',
+    tabIconDefault: '#7A7A85',
+    tabIconSelected: primary,
+    card: '#FFFFFF',
+    border: '#ECE8F8',
+    muted: '#6E6A7F',
+    success: '#16A34A',
+    warn: '#EAB308',
   },
   dark: {
     text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    background: bgDark,
+    tint: primaryDark,
+    icon: '#A6A1B8',
+    tabIconDefault: '#A6A1B8',
+    tabIconSelected: primaryDark,
+    card: '#1C1924',
+    border: '#2A2637',
+    muted: '#B8B4C9',
+    success: '#22C55E',
+    warn: '#FACC15',
   },
 };

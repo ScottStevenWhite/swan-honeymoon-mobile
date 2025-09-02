@@ -1,39 +1,91 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
-# dependencies
+# Node
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
 # Expo
 .expo/
-dist/
+.expo-shared/
 web-build/
-expo-env.d.ts
+dist/
 
-# Native
-.kotlin/
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
+# React Native
+*.log
+*.lock
+*.tmp
+*.swp
+*.swo
+*.DS_Store
 
 # Metro
-.metro-health-check*
+.metro/
+.packager/
+.haul/
 
-# debug
-npm-debug.*
-yarn-debug.*
-yarn-error.*
-
-# macOS
-.DS_Store
-*.pem
-
-# local env files
-.env*.local
-
-# typescript
+# TypeScript
 *.tsbuildinfo
 
-app-example
+# Android
+android/.gradle/
+android/.idea/
+android/build/
+android/app/build/
+android/local.properties
+android/captures/
+android/.settings/
+android/.classpath
+android/.project
+android/.externalNativeBuild/
+android/.cxx/
+
+# Ignore keystore files (security)
+android/app/debug.keystore
+*.keystore
+*.jks
+
+# iOS
+ios/build/
+ios/Pods/
+ios/DerivedData/
+ios/*.xcodeproj/project.xcworkspace/
+ios/*.xcworkspace/xcuserdata/
+ios/*.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+ios/**/*.xcuserstate
+ios/**/*.xcuserdatad
+ios/Podfile.lock
+
+# Xcode
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+
+# macOS
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Misc
+coverage/
+tmp/
